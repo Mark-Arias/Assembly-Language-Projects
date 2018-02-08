@@ -1,0 +1,100 @@
+// Mark Arias
+// Project 4 Memory Access and Manipulation
+// Program Purpose:
+// This program builds upon the general desing of project 3.
+// It improves on the design however, by implementing the use of dynamic memory allocation
+// and storage capabilities. 
+// Program allows user to store unsigned 32 bit numbers into dynamically allocated heap
+// memory. This initial memory location needs to be saved via a pointer
+// so that we can reference this start location, and also so that we can
+// properly delete the allocated memory at the programs end
+
+//------------------------------------------
+program MemoryManipulation;
+
+#include( "stdlib.hhf" )
+
+static
+	inputInteger	: uns32;
+	outputInteger	: uns32;
+	count			: uns32;
+	ptr				: pointer to uns32;
+	deletionPtr		: pointer to uns32;
+	totalByteIterations:	uns32;
+
+//------------------------------------------
+begin MemoryManipulation;
+
+	mov(0, count);
+	mov(0, ecx);						// initiaze index starting point to zero
+	mem.alloc(@size(uns32) *40);		// allocate space for 10 uns32 numbers
+	mov(eax, deletionPtr);				// store the original pointer location for memory deletion later
+	mov(eax, ptr);						// store starting mem location for later printing access
+	mov(eax, ebx);						// copy this starting adress to a new working location
+	mov(0, totalByteIterations);
+
+//------------------------------------------
+
+// Program 4 Name printout
+stdout.put("Mark Arias - Project 4");
+stdout.newln();
+stdout.newln();
+
+
+repeat
+
+	//stdin.flushInput();									// clear input stream
+	stdout.put("Enter a positive number, 0 to stop: ");	
+	stdin.get(inputInteger);							// get user numeric input, store in uns32 var
+	if(inputInteger = 0) then							// break out of the loop early so that we dont
+		break;											// print the zero to output
+	endif;
+	mov(inputInteger, (type uns32 [ebx + ecx]));		// store input in indexed heap memory location
+	inc(count);
+	inc(ecx);											// move 4 bytes total
+	inc(ecx);
+	inc(ecx);
+	inc(ecx);
+
+until(inputInteger = 0);
+
+
+//------------------------------------------
+		stdout.newln();
+		mov(ptr, ebx);										// start loop at initial dynamic memory
+		mov(0, edx);
+		mov(count, edi);
+		intmul(4,edi);
+		//mov(count, edi);
+		mov(edi, totalByteIterations);
+		
+		repeat
+			mov([ebx + edx], outputInteger);
+			stdout.put( outputInteger, " ");
+			inc(edx);
+			inc(edx);
+			inc(edx);
+			inc(edx);
+		until(edx = totalByteIterations);
+
+
+
+	
+	stdout.newln();
+
+
+// Program 4 Name printout
+stdout.newln();
+stdout.put("Mark Arias - End of Project 4");
+stdout.newln();
+
+
+//------------------------------------------
+// return dynamically allocated memory back to the system		
+mov(deletionPtr, eax);
+mem.free( eax );
+
+
+end MemoryManipulation;
+
+
