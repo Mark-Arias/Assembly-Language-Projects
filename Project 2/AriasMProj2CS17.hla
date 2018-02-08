@@ -1,0 +1,186 @@
+// Mark Arias
+// Project 2 Date Demonstration
+// Project start date( approx. 1/ 10/ 18)
+// Program Purpose:
+// This program is a derivation of the date demo found in the hla book.
+// The program takes input from the user and uses it to store the date
+// in a packed date format. The goal of this project is to use a 32 bit
+// date storage format instead
+
+// The new bit packing scheme
+// 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 4 3 2 1 0
+// y y y y y y y  y  y  y  y  y  y  y  y  y  y  y  m  m  m  m  m  m  m m d d d d d d d
+
+//Program Notes:
+//source code used from the plantation productions website
+// http://www.plantation-productions.com/Webster/www.artofasm.com/Linux/HTML/DatesAndTimes2.html
+// I believe this source code achieves the desired date packing scheme succinctly
+// and is the authors own modification of the dateDemo shown in the book
+// 
+
+
+
+program DateTimeDemo;
+ 
+#include( "stdlib.hhf" )
+ 
+
+ 
+static
+ 
+    month:          uns8;
+ 
+    day:          uns8;
+ 
+    year:          uns16;	// we are storing the year in two bytes
+ 							// allowing for a greater date range
+    
+ 
+    theDate:    date.daterec;
+ 
+            
+ 
+
+ 
+begin DateTimeDemo;
+
+
+// Program 2 Name printout
+stdout.put("Mark Arias Project 2");
+stdout.newln();
+ 
+
+ 	// perform error checking of user input
+    try
+ 
+    
+ 
+        stdout.put( "Enter the month (1-12):" );
+ 
+        stdin.get( month );
+ 
+        
+ 
+        stdin.flushInput();
+ 
+        stdout.put( "Enter the day (1-31):" );
+ 
+        stdin.get( day );
+ 
+        
+ 
+        stdin.flushInput();
+ 
+        stdout.put( "Enter the year (1583-9999): " );
+ 
+        stdin.get( year );
+ 
+        
+ 		// user enterd a valid date input, and so we can print it out
+        if( date.isValid( month, day, year )) then
+ 
+        
+ 
+            stdout.put( month, "/", day, "/", year, " is a valid date." nl );
+ 
+            
+ 
+        endif;
+ 
+
+ 
+        // Assign the fields to a date variable.
+ 		// and store the variables data in the required bit field
+        
+ 	// if execution reaches this point here, then it means that user entered
+	// good input values
+        mov( month, al );
+ 
+        mov( al, theDate.month );
+ 
+        mov( day, al );
+ 
+        mov( al, theDate.day );
+ 
+        mov( year, ax );	// using the ax register(16 bit) to store the year
+ 
+        mov( ax, theDate.year );
+
+        // move the data into a 32 bit register
+        // for output to user(to show the 32 bit data in use)
+        mov(theDate, eax);
+        stdout.put("Packed data = $", eax, nl);   
+           
+ 
+        // Force an exception if the date is illegal.
+ 
+        
+ 
+        date.validate( theDate );
+ 
+        
+	// these exceptions are only triggered if something goes wrong in the try
+	// block
+	// In other words. These are like if statements in the sense that they only
+	// get triggered if they encoutner the requisite conditions for activation
+
+      exception( ex.ConversionError )
+ 
+      
+ 
+        stdout.put
+ 
+        ( 
+ 
+            "One of the input values contained illegal characters" nl 
+ 
+        );
+ 
+        
+ 
+      exception( ex.ValueOutOfRange )
+ 
+      
+ 
+        stdout.put
+ 
+        (
+ 
+            "One of the input values was too large" nl
+ 
+        );
+ 
+        
+ 
+      exception( ex.InvalidDate )
+ 
+      
+ 
+        stdout.put
+ 
+        (
+ 
+            "The input date (", month, "/", day, "/", year, ") was invalid" nl
+ 
+        );
+ 
+        
+ 
+    endtry;
+ 
+        
+ 
+
+// Program 2 Name printout
+stdout.newln();
+stdout.put("Mark Arias ");
+stdout.newln();
+            
+ 
+end DateTimeDemo;
+
+
+
+
+
+
