@@ -1,0 +1,99 @@
+program selectionSort;
+
+#include("stdlib.hhf")
+
+	//--------------------------------------------------------
+	// Project 5
+	// Selection Sort implemented in HLA
+	// This is a program that implements the mentioned algorithm
+	// in hla syntax. It sorts an unsorted unsigned 32 bit array
+	// from smalles on the left, to largest on the right
+	// same algo can be modified to sort array into decreasing order
+	//--------------------------------------------------------
+
+const NumElements := 16;
+static
+	dataArray:	uns32 [NumElements] := [77, 11, 56, 33, 27, 60, 21, 99, 66,
+										 69, 42, 25, 22, 55, 88, 13];
+	temp	:	uns32;
+	temp2	:   uns32;
+	lastIndex	: uns32;
+	biggestValIndex 	 :  uns32;
+
+begin selectionSort;
+	
+	//--------------------------------------------------------
+
+	stdout.put(nl, "Mark Arias - Project 5", nl, nl);
+	stdout.put("Selection Sort, Number of Array Elements: ", NumElements, nl);
+	stdout.put("Original Array Elements: ", nl);
+	for(mov(0, ebx); ebx < NumElements; inc(ebx)) do
+		stdout.puti32Size(dataArray[ebx * 4], 4, ' ');
+	endfor;
+
+	stdout.newln();
+	stdout.newln();
+
+	//--------------------------------------------------------
+
+	mov(NumElements -1, edx);	// edx contains lastIndex
+	mov(edx, lastIndex);
+
+	while(lastIndex > 0) do
+
+		mov(0, biggestValIndex);
+		
+
+		for(mov(0, ebx); ebx <= lastIndex; inc(ebx)) do		// ebx is i variable
+			mov(biggestValIndex, esi);			// esi used to move correctly in 4's
+			intmul(4, esi);
+			mov(dataArray[esi], eax);	// eax used as temp register here
+			if(eax < dataArray[ebx * 4]) then
+				mov(ebx, biggestValIndex);
+			endif;
+		endfor;
+
+
+		// step 1
+		mov(lastIndex, edx);	// edx contains the last index location
+		intmul(4,edx);
+		mov(dataArray[edx], temp);	//store the value at back of array in temp
+
+		// step 2
+		mov(biggestValIndex, esi);
+		intmul(4,esi);
+		mov(dataArray[esi],temp2);
+		mov(temp2, dataArray[edx]);
+
+		// step 3
+		mov(temp, dataArray[esi]);
+
+		
+
+		// decrement the lastIndex counter
+		sub(1,lastIndex);
+
+		// print out the current array after one sorting pass
+		for(mov(0, ebx); ebx < NumElements; inc(ebx)) do
+		stdout.puti32Size(dataArray[ebx * 4], 4, ' ');
+		endfor;	
+		stdout.newln();
+
+	endwhile;
+
+	//--------------------------------------------------------
+
+	stdout.put(nl, "Mark Arias - End of Project 5", nl, nl);
+
+
+
+
+end selectionSort;
+
+
+
+
+
+
+
+
