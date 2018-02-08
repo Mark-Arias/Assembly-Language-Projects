@@ -1,0 +1,40 @@
+// Mark Arias
+// Project 1: Introduction
+// 2/2/18
+// Program Purpose:
+// Print out a table of numbers in ascending order.
+// This program is an example of using a putiXSize routine which is a specific form of the more
+// general put routine. This is useful for working with a variable, register of a specific size
+
+program NumsInColumns;
+
+#include("stdlib.hhf")
+
+var
+	i32:	int32;	// declaration of 32 bit integer
+	colCount:	int8;	// 8 bit integer called colCount
+
+begin NumsInColumns;
+	// output to screen specified text
+	stdout.put("Mark Steven Arias - Project 1");
+	stdout.newln();	
+	stdout.newln();
+	
+	// main codeblock that performs creation of numeric table
+	mov(1, i32);	// move 1 into i32 variable
+	mov(0, colCount);	// do the same for colCount
+	while(i32 <= 96) do	// loop until var hits 96
+		if(colCount = 8) then	// runs every 8 iterations, creates '\n'
+			stdout.newln();
+			mov(0, colCount);	// reset count
+		endif;
+
+		stdout.puti32Size(i32, 5, ' ');	// output var, with padding of 5
+		add(1, i32);	// increment var by one	
+		add(1, colCount);
+	endwhile;
+	stdout.newln();
+
+end NumsInColumns;
+
+
