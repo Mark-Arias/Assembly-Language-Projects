@@ -1,0 +1,110 @@
+// Mark Arias
+// Project 3 Number Manipulation
+// Project Start Date: (1/20/18)
+// Program Purpose:
+// Write a program to read numbers
+// count the items read
+// calculate running total
+// find the maximum and minimum numbers encountered
+// program stops when sentinel value of zero is encountered
+
+
+program NumberManipulation;
+
+#include( "stdlib.hhf" );
+
+static
+	// variable declarations
+	inputInteger	: uns16;
+	maxInteger	: uns16;
+	totalSum	: uns16;
+	loopCount	: uns16;
+	minInteger	: uns16;
+
+begin NumberManipulation;
+
+// Program 3 Name printout
+stdout.put("Mark Arias - Project 3");
+stdout.newln();
+
+// initialize count to zero
+mov(0, loopCount);
+// initialize largest to zero
+mov(0, maxInteger);
+
+
+repeat
+	add(1, loopCount);	// increment to keep track of loop repititions
+	// code to execute until condition met
+	stdout.put("Enter a positive number, 0 to stop: ");
+	stdin.get(inputInteger);
+	stdin.flushInput();
+	
+	//need to terminate loop earlier if 0 encountered to prevent incorrect
+	// use as lowest number
+	if(inputInteger = 0)then
+	sub(1,loopCount);	// to maintain correct count
+	break;
+	endif;
+
+
+
+	// min is the first value initially entered
+	if(loopCount = 1) then
+	mov(inputInteger, dx);
+	mov(dx, minInteger);
+	endif;
+
+	// code block that performs the running total calculation
+	mov(inputInteger, ax);
+	add(ax, totalSum);
+
+
+	mov(inputInteger, bx);
+	// figure out which number entered is the largest
+	if(maxInteger < bx) then
+		mov(inputInteger, ax);
+		mov(ax, maxInteger);
+	endif;
+	
+
+	// figure out which number entered is the smallest
+	if(minInteger > bx) then
+		mov(inputInteger, bx);
+		mov(bx,minInteger);
+	endif;
+	
+
+
+
+
+
+until(inputInteger = 0);
+
+// display total count
+         stdout.put("Total: ", totalSum);
+         stdout.newln();
+
+// display loop count
+          stdout.put("Count: ", loopCount);
+          stdout.newln();
+
+// display the largest number
+          stdout.put("Maximum: ", maxInteger);
+          stdout.newln();
+
+
+// display the min value
+          stdout.put("Minimum: ", minInteger);
+          stdout.newln();
+
+
+end NumberManipulation;
+
+
+
+
+
+
+
+
