@@ -1,0 +1,133 @@
+program selectionSort;
+									//Mark Arias
+									//Project 6 
+									//Selection Sort Algo implemented
+									//with pure assembly control structs
+#include("stdlib.hhf")
+
+const 
+			NumElements := 16;
+
+		
+
+static
+			dataArray:	uns32 [NumElements] := [77, 11, 56, 33, 27, 60, 21, 99, 66,
+										 69, 42, 25, 22, 55, 88, 13];
+			temp	:	uns32;
+			temp2	:   uns32;
+			lastIndex	: uns32;
+			biggestValIndex 	 :  uns32;
+
+
+
+
+begin selectionSort;
+
+			stdout.put(nl, "Mark Arias - Project 6", nl, nl);
+			stdout.put("Selection Sort, Number of Array Elements: ", NumElements, nl);
+			stdout.put("Original Array Elements: ", nl);
+
+									// akin to init i to zero
+			mov(0, ebx);					// the cmp then evals reg val w/
+									// mem val. and modifies flags reg.
+									//j** then moves flow control
+									//depending on flag state(less than,
+									//overflow, !=, etc) induced by
+									//prior cmp code
+ForLoop:		
+			cmp(ebx, NumElements);
+			jnl EndForLoop;
+			stdout.puti32Size(dataArray[ebx * 4], 4, ' ');
+			inc(ebx);
+			jmp ForLoop;					// otherwise use standard jmp code
+EndForLoop:
+
+			stdout.newln();
+			stdout.newln();
+
+
+			mov(NumElements -1, edx);			// edx contains lastIndex
+			mov(edx, lastIndex);
+
+	
+WhileLoop:
+			cmp(lastIndex, 0);
+	
+			jng EndWhileLoop;
+
+			mov(0, biggestValIndex);
+		
+
+
+			mov(0, ebx);
+ForLoop3:
+				
+			cmp(ebx, lastIndex);
+			jnle EndForLoop3;
+			mov(biggestValIndex, esi);			// esi used to move correctly in 4's		
+			intmul(4, esi);
+			mov(dataArray[esi], eax);			// eax used as temp register here	
+			
+			
+
+			cmp(eax, dataArray[ebx * 4]);
+			jl ThenInstructions;
+			jnl SkipStatement;
+
+ThenInstructions:
+			mov(ebx, biggestValIndex);
+
+SkipStatement:
+
+			inc(ebx);
+			jmp ForLoop3;
+EndForLoop3:
+
+
+									// step 1
+			mov(lastIndex, edx);				// edx contains the last index location
+			
+			intmul(4,edx);
+			mov(dataArray[edx], temp);			//store the value at back of array in temp
+									// step 2
+			mov(biggestValIndex, esi);
+			intmul(4,esi);
+			mov(dataArray[esi],temp2);
+			mov(temp2, dataArray[edx]);
+									// step 3
+			mov(temp, dataArray[esi]);
+
+
+
+			sub(1,lastIndex);				// decrement the lastIndex counter
+
+			mov(0, ebx);
+ForLoop2:
+			cmp(ebx, NumElements);
+			jnl EndForLoop2;
+			stdout.puti32Size(dataArray[ebx * 4], 4, ' ');
+			inc(ebx);
+			jmp ForLoop2;
+EndForLoop2:
+
+
+			stdout.newln();
+
+			jmp WhileLoop;
+
+EndWhileLoop:
+
+			stdout.put(nl, "Mark Arias - End of Project 6", nl, nl);
+
+
+
+
+end selectionSort;
+
+
+
+
+
+
+
+
